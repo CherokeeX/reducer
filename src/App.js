@@ -1,5 +1,32 @@
-import { useState } from "react";
+import {  useReducer, useState } from "react";
 import "./App.css";
+
+function reducer (state,action) {
+switch (action.type){
+  case 'SET_TODO' : {
+    return {
+      ...state,
+      todo: action.value
+    }
+  }
+case 'ADD_TODO': {
+  return {
+...state, 
+  todos :[state.todos , action.todo]
+
+  }
+}
+
+
+}
+
+
+
+}
+
+
+
+
 
 function App() {
   //  const [todos,setTodos] = useState ([])
@@ -25,35 +52,55 @@ function App() {
   //   {todos.map((todo,index)=>{return(<li key={index}>{todo}</li>)})}
   // </ul>
   //)
-  const [todos, setTodos] = useState([]);
-  const [todo, setTodo] = useState("");
-  const submitHandle = (e) => {
-    e.preventDefault();
-    setTodos([...todos, todo]);
-  };
 
-  return (
-    <>
-      <h1> useReduce finnal coding</h1>
 
-      <form onSubmit={submitHandle}>
-        <input
-          type="text"
-          value={todo}
-          onChange={(e) => setTodo(e.target.value)}
-        />
-        <button disabled={!todo} type="submit">
-          Add TODO
-        </button>
-      </form>
+const submitHandle = e => {
+  e.preventDefault ()
+  //setTodos([...todos , todo])
+ // setTodo ('')
+dispatch ({
+  type: 'ADD_TODO',
+  todo : state.todo
+})
 
-      <ul>
-        {todos.map((todo, index) => {
-          return <li key={index}> {todo}</li>;
-        })}
-      </ul>
-    </>
-  );
+}
+
+const [state,dispatch ]=useReducer(reducer, {
+
+  todos : [],
+  todo : ''
+
+})
+
+const onChange = e => {
+  dispatch ({
+    type : 'SET_TODO',
+    value: e.target.value
+  })
+}
+return (
+<>
+ 
+<h1>MY FIRST TODO LIST APP</h1>
+<form onSubmit={submitHandle}>
+  <input type="text"  value={state.todo} onChange={onChange} />
+  <button disabled={!state.todo} type="submit">ADD TODO</button>
+</form>
+
+<ul>
+  {state.todos.map ((todo,index)=> (
+    <li key={index}>{todo}</li>
+  ))}
+</ul>
+
+
+</>
+
+)
+
+
+
+
 }
 
 export default App;
